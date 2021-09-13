@@ -3,19 +3,19 @@ const { addThought, getThought, removeThought, addReaction, removeReaction } = r
 
 // /api/thoughts
 router
-    .route('/api/thoughts')
+    .route('/thoughts')
     .get(getThought)
     .post(addThought)
 
 router
-    .route('/api/thoughts/:thoughtId')
+    .route('/thoughts/:thoughtId')
     //.get(getThoughtById)
     //.put(updateThought)
     .delete(removeThought)
 
 // /api/thoughts/:thoughtId/reactions
 router
-    .route('/api/thoughts/:thoughtId/reactions')
+    .route('/thoughts/:thoughtId/reactions')
     .post(addReaction)
     .delete(removeReaction)
 
