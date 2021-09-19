@@ -14,13 +14,28 @@ const thoughtController = {
             });
     },
     //getThoughtById
+    getThoughtById({ params }, res) {
+        Thought.findById({ _id: params.id })
+            .then(dbThoughtData => {
+                if (!dbThoughtData) {
+                    res.status(404).json({ message: 'No Thought found with this ID!' })
+                    return;
+                }
+                res.json(dbThoughtData);
+            })
+            .catch(err => {
+                console.log(err);
+                res.status(400).json(err);
+            });
+    },
+
     //addThought
     addThought({ params, body }, res) {
         console.log(body);
         Thought.create(body)
-            .then(({ _id }) => {
+            .then(({ _id, username }) => {
                 return User.findOneAndUpdate(
-                    { _id: params.userId },
+                    { userName: username },
                     { $push: { thoughts: _id } },
                     { new: true }
                 );
@@ -35,6 +50,22 @@ const thoughtController = {
             .catch(err => res.json(err));
     },
     //updateThought
+    updateThought({ params, body }, res) {
+        console.log(body);
+        Thought.findOneAndUpdate(
+            { _id: params.id },
+            body,
+            { new: true }
+        )
+            .then(dbThoughtData => {
+                if (!dbThoughtData) {
+                    res.status(404).json({ message: 'No thought found with this ID' })
+                    return;
+                }
+                res.json(dbThoughtData);
+            })
+            .catch(err => res.status(400).json(err));
+    },
 
     addReaction({ params, body }, res) {
         Thought.findOneAndUpdate(
